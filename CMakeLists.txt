@@ -12,21 +12,23 @@ add_executable(sudoku_solver
 
 enable_testing()
 
-add_executable(grid_tests
+add_executable(sudoku_solver_tests
     grid_tests.cpp
+    row_rule_tests.cpp
 )
 
-target_link_libraries(grid_tests
+
+target_link_libraries(sudoku_solver_tests
     PRIVATE
         GTest::gtest
         GTest::gtest_main
 )
 
 add_test(AllTests
-    grid_tests
+    sudoku_solver_tests
 )
 
 add_custom_target(RunUnitTests ALL
     COMMAND ctest
-    DEPENDS grid_tests
+    DEPENDS sudoku_solver_tests
 )
