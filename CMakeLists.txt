@@ -28,4 +28,5 @@ add_test(AllTests
 
 add_custom_target(RunUnitTests ALL
     COMMAND ctest
+    DEPENDS grid_tests
 )
