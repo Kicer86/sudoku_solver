@@ -1,8 +1,11 @@
 #ifndef GRID_HPP
 #define GRID_HPP
 
+#include "igrid.hpp"
+
+
 template<typename T>
-class Grid
+class Grid: public IGrid<T>
 {
     public:
         Grid(int rows, int cols)
@@ -25,12 +28,12 @@ class Grid
             return m_cols;
         }
 
-        void set(int r, int c, const T& v)
+        void set(int r, int c, const T& v) override
         {
             m_matrix[r][c] = v;
         }
 
-        const T& get(int r, int c) const
+        const T& get(int r, int c) const override
         {
             return m_matrix[r][c];
         }
