@@ -18,12 +18,12 @@ class Grid: public IGrid<T>
                 m_matrix.push_back(Row(cols, {}));   // with Row filled with 'cols` items
         }
 
-        int rows() const
+        int rows() const override
         {
             return m_rows;
         }
 
-        int columns() const
+        int columns() const override
         {
             return m_cols;
         }
