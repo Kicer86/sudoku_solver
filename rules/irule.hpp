@@ -2,6 +2,8 @@
 #ifndef IRULE_HPP
 #define IRULE_HPP
 
+#include <vector>
+
 class IRule
 {
 public:
