@@ -26,8 +26,8 @@ TEST(RowRuleTest, mixedRow)
 
     RowRule rule(grid);
 
-    const auto valid_numbers = rule.validNumbers(0, 0);
-    EXPECT_EQ(valid_numbers, (std::vector{2, 3, 4}));
+    const auto valid_numbers = rule.validNumbers(1, 0);
+    EXPECT_EQ(valid_numbers, (std::vector{4, 5, 6}));
 }
 
 
