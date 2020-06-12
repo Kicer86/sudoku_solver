@@ -15,7 +15,6 @@ TEST(RowRuleTest, emptyRow)
 }
 
 
-
 TEST(RowRuleTest, mixedRow)
 {
     const Grid<int> grid
