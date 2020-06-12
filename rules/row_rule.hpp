@@ -1,8 +1,6 @@
 #ifndef ROWRULE_HPP
 #define ROWRULE_HPP
 
-#include <vector>
-
 #include "../igrid.hpp"
 #include "irule.hpp"
 
