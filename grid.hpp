@@ -32,6 +32,15 @@ class Grid: public IGrid<T>
 
         }
 
+        Grid(const Grid<T>& other) = default;
+
+        Grid(const IGrid<T>& other): Grid(other.rows(), other.columns())
+        {
+            for (int i = 0; i < m_rows; i++)
+                for (int j = 0; j < m_cols; j++)
+                    set(i, j, other.get(i, j));
+        }
+
         int rows() const override
         {
             return m_rows;
@@ -50,6 +59,18 @@ class Grid: public IGrid<T>
         const T& get(int r, int c) const override
         {
             return m_matrix[r][c];
+        }
+
+        bool operator==(const Grid<T>& other) const
+        {
+            return m_rows == other.m_rows &&
+                   m_cols == other.m_cols &&
+                   m_matrix == other.m_matrix;
+        }
+
+        bool operator!=(const Grid<T>& other) const
+        {
+            return (*this == other) == false;
         }
 
     private:
