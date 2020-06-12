@@ -17,9 +17,11 @@ add_executable(sudoku_solver
 enable_testing()
 
 add_executable(sudoku_solver_tests
+    column_rule_tests.cpp
     grid_tests.cpp
     row_rule_tests.cpp
 
+    rules/column_rule.cpp
     rules/row_rule.cpp
 )
 
