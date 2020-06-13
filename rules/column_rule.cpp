@@ -1,6 +1,4 @@
 
-#include <algorithm>
-
 #include "column_rule.hpp"
 #include "utils.hpp"
 
@@ -26,10 +24,7 @@ std::vector<int> ColumnRule::validNumbers(int row, int col) const
     {
         const int cell_value = m_grid.get(i, col);
         if (cell_value > 0)
-        {
-            const auto last = std::remove(valid.begin(), valid.end(), cell_value);
-            valid.erase(last, valid.end());
-        }
+            utils::erase(valid, cell_value);
     }
 
     return valid;

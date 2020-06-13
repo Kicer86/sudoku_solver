@@ -1,6 +1,4 @@
 
-#include <algorithm>
-
 #include "square_rule.hpp"
 #include "utils.hpp"
 
@@ -27,10 +25,7 @@ std::vector<int> SquareRule::validNumbers(int row, int col) const
         {
             const int cell_value = m_grid.get(base_row + i, base_col + j);
             if (cell_value > 0)
-            {
-                const auto last = std::remove(valid.begin(), valid.end(), cell_value);
-                valid.erase(last, valid.end());
-            }
+                utils::erase(valid, cell_value);
         }
 
     return valid;
