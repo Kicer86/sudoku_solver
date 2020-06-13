@@ -89,5 +89,4 @@ std::vector<std::pair<int, int>> Solver::findGaps() const
                 gaps.emplace_back(i, j);
 
     return gaps;
-
 }
