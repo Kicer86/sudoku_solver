@@ -70,6 +70,37 @@ TEST(GridTest, valuesInitializerList)
 }
 
 
+TEST(GridTest, massiveUpdate)
+{
+    Grid<int> grid
+    {
+        {1, 2, 3, 4},
+        {4, 5, 6, 7},
+        {0, 0, 0, 0}
+    };
+
+    const std::vector<std::tuple<int, int, int>> values =
+    {
+        {2, 0, 9},
+        {2, 1, 8},
+        {2, 2, 7},
+        {2, 3, 6},
+    };
+
+    grid.set(values.begin(), values.end());
+
+    Grid<int> expected_grid
+    {
+        {1, 2, 3, 4},
+        {4, 5, 6, 7},
+        {9, 8, 7, 6}
+    };
+
+    EXPECT_EQ(grid, expected_grid);
+}
+
+
+
 TEST(GridTest, equal)
 {
     Grid<float> grid1

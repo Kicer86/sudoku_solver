@@ -56,6 +56,15 @@ class Grid: public IGrid<T>
             m_matrix[r][c] = v;
         }
 
+        template<typename TI>
+        void set(TI first, TI last)
+        {
+            for(auto it = first; it != last; ++it)
+                set(std::get<0>(*it),       // row
+                    std::get<1>(*it),       // column
+                    std::get<2>(*it));      // value
+        }
+
         const T& get(int r, int c) const override
         {
             return m_matrix[r][c];
