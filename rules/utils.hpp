@@ -7,6 +7,7 @@
 namespace utils
 {
     std::vector<int> fill(int max);
+    void erase(std::vector<int> &, int value);
 }
 
 #endif
