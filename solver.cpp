@@ -14,39 +14,24 @@ Solver::Solver(const IGrid<int>& grid)
 }
 
 
-std::vector<std::tuple<int, int, int>> Solver::generateSteps()
+std::vector<std::tuple<int, int, int>> Solver::findObvious()
 {
-    std::vector<std::tuple<int, int, int> > steps;
+    std::vector<std::tuple<int, int, int>> solutions;
 
-    std::vector gaps = findGaps();
-    int gaps_left = gaps.size();
-    bool work = true;
+    const std::vector gaps = findGaps();
 
-    while (work)
+    for(int i = 0; i < gaps.size(); i++)
     {
-        work = false;
+        const std::pair gap = gaps[i];
+        const int r = gap.first;
+        const int c = gap.second;
+        const int value = solve(r, c);
 
-        for(int i = 0; i < gaps_left;)
-        {
-            const std::pair gap = gaps[i];
-            const int r = gap.first;
-            const int c = gap.second;
-            const int value = solve(r, c);
-
-            if (value > 0)
-            {
-                steps.emplace_back(r, c, value);
-                m_grid.set(r, c, value);
-                work = true;
-                gaps_left--;
-                std::swap(gaps[i], gaps[gaps_left]);
-            }
-            else
-                i++;
-        }
+        if (value > 0)
+            solutions.emplace_back(r, c, value);
     }
 
-    return steps;
+    return solutions;
 }
 
 

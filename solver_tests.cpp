@@ -8,9 +8,9 @@
 
 using testing::Contains;
 
-TEST(SolverTest, easyPuzzle1)
+TEST(SolverTest, easyPuzzle1StepByStep)
 {
-    const Grid<int> grid
+    Grid<int> grid
     {
         { 0, 2, 0,  4, 5, 6,  7, 8, 9 },
         { 4, 5, 7,  0, 8, 0,  2, 3, 6 },
@@ -25,31 +25,45 @@ TEST(SolverTest, easyPuzzle1)
         { 9, 3, 8,  7, 2, 5,  0, 6, 0 }
     };
 
-    Solver solver(grid);
+    // step #1
+    {
+        Solver solver(grid);
 
-    const auto steps = solver.generateSteps();
+        const auto steps = solver.findObvious();
 
-    ASSERT_EQ(steps.size(), 18);
-    EXPECT_THAT(steps, Contains( std::make_tuple(0, 0, 1)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(0, 2, 3)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(1, 3, 1)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(1, 5, 9)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(2, 6, 1)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(2, 8, 5)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(3, 0, 8)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(3, 1, 1)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(4, 3, 8)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(4, 5, 1)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(5, 7, 1)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(5, 8, 2)) );
+        ASSERT_EQ(steps.size(), 10);
+        EXPECT_THAT( steps, Contains( std::make_tuple(0, 0, 1)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(0, 2, 3)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(2, 6, 1)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(3, 1, 1)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(4, 5, 1)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(5, 7, 1)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(6, 0, 5)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(6, 2, 2)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(7, 3, 9)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(8, 8, 1)) );
 
-    EXPECT_THAT(steps, Contains( std::make_tuple(6, 0, 5)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(6, 2, 2)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(7, 3, 9)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(7, 5, 3)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(8, 6, 4)) );
-    EXPECT_THAT(steps, Contains( std::make_tuple(8, 8, 1)) );
+        grid.set(steps.begin(), steps.end());
+    }
+
+    // step #2
+    {
+        Solver solver(grid);
+
+        const auto steps = solver.findObvious();
+
+        ASSERT_EQ(steps.size(), 8);
+        EXPECT_THAT( steps, Contains( std::make_tuple(1, 3, 1)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(1, 5, 9)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(2, 8, 5)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(3, 0, 8)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(4, 3, 8)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(5, 8, 2)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(7, 5, 3)) );
+        EXPECT_THAT( steps, Contains( std::make_tuple(8, 6, 4)) );
+    }
 }
+
 
 
 /*

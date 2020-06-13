@@ -6,7 +6,7 @@
 #include <tuple>
 #include <vector>
 
-#include "grid.hpp"
+#include "igrid.hpp"
 
 
 class Solver
@@ -14,13 +14,13 @@ class Solver
 public:
     Solver(const IGrid<int> &);
 
-    std::vector<std::tuple<int, int, int>> generateSteps();
+    std::vector<std::tuple<int, int, int>> findObvious();
     int solve(int r, int c);
 
 private:
     typedef std::pair<int, int> Gap;
 
-    Grid<int> m_grid;
+    const IGrid<int>& m_grid;
 
     std::vector<Gap> findGaps() const;
 };
