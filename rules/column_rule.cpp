@@ -2,6 +2,7 @@
 #include <algorithm>
 
 #include "column_rule.hpp"
+#include "utils.hpp"
 
 
 ColumnRule::ColumnRule(const IGrid<int>& grid)
@@ -19,8 +20,7 @@ std::vector<int> ColumnRule::validNumbers(int row, int col) const
     const int numbers = rows;            // possible numbers == number of row in grid
 
     valid.reserve(numbers);
-    for(int i = 1; i <= numbers; i++)
-        valid.push_back(i);
+    valid = utils::fill(numbers);
 
     for(int i = 0; i < rows; i++)
     {
