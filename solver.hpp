@@ -18,9 +18,11 @@ public:
     int solve(int r, int c);
 
 private:
+    typedef std::pair<int, int> Gap;
+
     Grid<int> m_grid;
 
-    std::vector<std::pair<int, int>> findGaps() const;
+    std::vector<Gap> findGaps() const;
 };
 
 #endif // SOLVER_HPP
