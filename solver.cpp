@@ -22,37 +22,60 @@ std::vector<std::tuple<int, int, int>> Solver::generateSteps()
     const RowRule row_rule(m_grid);
     const SquareRule square_rule(m_grid);
 
+    std::vector gaps = findGaps();
+    int gaps_left = gaps.size();
     bool work = true;
+
     while (work)
     {
         work = false;
 
-        for (int i = 0; i < m_grid.rows(); i++)
-            for (int j = 0; j < m_grid.columns(); j++)
-                if (m_grid.get(i, j) == 0)
-                {
-                    const auto valid1 = column_rule.validNumbers(i, j);
-                    const auto valid2 = row_rule.validNumbers(i, j);
-                    const auto valid3 = square_rule.validNumbers(i, j);
+        for(int i = 0; i < gaps_left;)
+        {
+            const std::pair gap = gaps[i];
+            const int r = gap.first;
+            const int c = gap.second;
 
-                    std::vector<int> all12, all;
-                    std::set_intersection(valid1.begin(), valid1.end(),
-                                        valid2.begin(), valid2.end(),
-                                        std::back_inserter(all12));
+            const auto valid1 = column_rule.validNumbers(r, c);
+            const auto valid2 = row_rule.validNumbers(r, c);
+            const auto valid3 = square_rule.validNumbers(r, c);
 
-                    std::set_intersection(valid3.begin(), valid3.end(),
-                                        all12.begin(), all12.end(),
-                                        std::back_inserter(all));
+            std::vector<int> all12, all;
+            std::set_intersection(valid1.begin(), valid1.end(),
+                                valid2.begin(), valid2.end(),
+                                std::back_inserter(all12));
 
-                    if (all.size() == 1)
-                    {
-                        const int value = all.front();
-                        steps.emplace_back(i, j, value);
-                        m_grid.set(i, j, value);
-                        work = true;
-                    }
-                }
+            std::set_intersection(valid3.begin(), valid3.end(),
+                                all12.begin(), all12.end(),
+                                std::back_inserter(all));
+
+            if (all.size() == 1)
+            {
+                const int value = all.front();
+                steps.emplace_back(r, c, value);
+                m_grid.set(r, c, value);
+                work = true;
+                gaps_left--;
+                std::swap(gaps[i], gaps[gaps_left]);
+            }
+            else
+                i++;
+        }
     }
 
     return steps;
+}
+
+
+std::vector<std::pair<int, int>> Solver::findGaps() const
+{
+    std::vector<std::pair<int, int>> gaps;
+
+    for (int i = 0; i < m_grid.rows(); i++)
+        for (int j = 0; j < m_grid.columns(); j++)
+            if (m_grid.get(i, j) == 0)
+                gaps.emplace_back(i, j);
+
+    return gaps;
+
 }

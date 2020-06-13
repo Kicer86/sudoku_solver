@@ -17,6 +17,8 @@ public:
 
 private:
     Grid<int> m_grid;
+
+    std::vector<std::pair<int, int>> findGaps() const;
 };
 
 #endif // SOLVER_HPP
