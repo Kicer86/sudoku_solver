@@ -22,10 +22,12 @@ add_executable(sudoku_solver_tests
     row_rule_tests.cpp
     solver_tests.cpp
     square_rule_tests.cpp
+    utils_tests.cpp
 
     rules/column_rule.cpp
     rules/row_rule.cpp
     rules/square_rule.cpp
+    rules/utils.cpp
     solver.cpp
 )
 
