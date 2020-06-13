@@ -20,6 +20,7 @@ public:
 private:
     typedef std::pair<int, int> Gap;
 
+    std::vector<Gap> m_gaps;
     const IGrid<int>& m_grid;
 
     std::vector<Gap> findGaps() const;

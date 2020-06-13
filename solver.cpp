@@ -10,7 +10,7 @@
 Solver::Solver(const IGrid<int>& grid)
     : m_grid(grid)
 {
-
+    m_gaps = findGaps();
 }
 
 
@@ -18,11 +18,8 @@ std::vector<std::tuple<int, int, int>> Solver::findObvious()
 {
     std::vector<std::tuple<int, int, int>> solutions;
 
-    const std::vector gaps = findGaps();
-
-    for(int i = 0; i < gaps.size(); i++)
+    for(const auto& gap: m_gaps)
     {
-        const std::pair gap = gaps[i];
         const int r = gap.first;
         const int c = gap.second;
         const int value = solve(r, c);
