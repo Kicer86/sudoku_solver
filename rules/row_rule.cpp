@@ -30,3 +30,31 @@ std::vector<int> RowRule::validNumbers(int row, int col) const
     return valid;
 }
 
+
+std::vector<std::pair<int, int>> RowRule::possibleLocations(int row, int col, int value) const
+{
+    std::vector<std::pair<int, int>> locations;
+
+    const int columns = m_grid.columns();
+    bool contains_value = false;
+
+    for(int i = 0; i < columns; i++)
+    {
+        const int cell_value = m_grid.get(row, i);
+        if (cell_value == value)
+        {
+            contains_value = true;
+            break;
+        }
+    }
+
+    if (contains_value == false)
+        for(int i = 0; i < columns; i++)
+        {
+            const int cell_value = m_grid.get(row, i);
+            if (cell_value == 0)
+                locations.emplace_back(row, i);
+        }
+
+    return locations;
+}
