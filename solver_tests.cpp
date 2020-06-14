@@ -97,3 +97,61 @@ TEST(SolverTest, hardPuzzle1)
     EXPECT_THAT( hidden, Contains( std::make_tuple(4, 6, 3)) );
     EXPECT_THAT( hidden, Contains( std::make_tuple(5, 4, 9)) );
 }
+
+
+TEST(SolverTest, hardPuzzleFullSolve)
+{
+    Grid<int> grid
+    {
+        { 1, 0, 0,  0, 7, 0,  0, 3, 0 },
+        { 8, 3, 0,  6, 0, 0,  0, 0, 0 },
+        { 0, 0, 2,  9, 0, 0,  6, 0, 8 },
+
+        { 6, 0, 0,  0, 0, 4,  9, 0, 7 },
+        { 0, 9, 0,  0, 0, 0,  0, 5, 0 },
+        { 3, 0, 7,  5, 0, 0,  0, 0, 4 },
+
+        { 2, 0, 3,  0, 0, 9,  1, 0, 0 },
+        { 0, 0, 0,  0, 0, 2,  0, 4, 3 },
+        { 0, 4, 0,  0, 8, 0,  0, 0, 9 }
+        // by M. Feenstra, Den Haag - https://www.sudoku.ws/3-20.png
+    };
+
+    bool work = true;
+
+    while(work)
+    {
+        work = false;
+        for(;;)
+        {
+            Solver solver(grid);
+            const auto steps = solver.findObvious();
+
+            if (steps.empty())
+                break;
+            else
+            {
+                grid.set(steps.begin(), steps.end());
+                work = true;
+                continue;
+            }
+        }
+
+        for(;;)
+        {
+            Solver solver(grid);
+            const auto steps = solver.findHidden();
+
+            if (steps.empty())
+                break;
+            else
+            {
+                grid.set(steps.begin(), steps.end());
+                work = true;
+                continue;
+            }
+        }
+    }
+
+    // @TODO: here grid should be solved
+}
