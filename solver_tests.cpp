@@ -23,6 +23,7 @@ TEST(SolverTest, easyPuzzle1StepByStep)
         { 0, 4, 0,  6, 1, 8,  3, 9, 7 },
         { 7, 6, 1,  0, 4, 0,  5, 2, 8 },
         { 9, 3, 8,  7, 2, 5,  0, 6, 0 }
+        // http://www.sudokuessentials.com/sudoku_for_kids.html
     };
 
     // step #1
@@ -65,7 +66,6 @@ TEST(SolverTest, easyPuzzle1StepByStep)
 }
 
 
-
 /*
 TEST(SolverTest, hardPuzzle1)
 {
@@ -82,11 +82,12 @@ TEST(SolverTest, hardPuzzle1)
         { 2, 0, 3,  0, 0, 9,  1, 0, 0 },
         { 0, 0, 0,  0, 0, 2,  0, 4, 3 },
         { 0, 4, 0,  0, 8, 0,  0, 0, 9 }
+        // by M. Feenstra, Den Haag - https://www.sudoku.ws/3-20.png
     };
 
     Solver solver(grid);
 
-    const auto steps = solver.generateSteps();
+    const auto steps = solver.findObvious();
 
     ASSERT_EQ(steps.size(), 18);
     EXPECT_THAT(steps, Contains( std::make_tuple(0, 0, 1)) );
