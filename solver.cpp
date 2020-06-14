@@ -46,13 +46,12 @@ int Solver::solve(int r, int c)
 
     std::vector<int> all12, all;
     std::set_intersection(valid1.begin(), valid1.end(),
-                        valid2.begin(), valid2.end(),
-                        std::back_inserter(all12));
+                          valid2.begin(), valid2.end(),
+                          std::back_inserter(all12));
 
     std::set_intersection(valid3.begin(), valid3.end(),
-                        all12.begin(), all12.end(),
-                        std::back_inserter(all));
-
+                          all12.begin(), all12.end(),
+                          std::back_inserter(all));
 
     if (all.size() == 1)
         v = all.front();
