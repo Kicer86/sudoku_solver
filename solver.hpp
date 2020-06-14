@@ -15,6 +15,7 @@ public:
     Solver(const IGrid<int> &);
 
     std::vector<std::tuple<int, int, int>> findObvious();
+    std::vector<std::tuple<int, int, int>> findHidden();
     int solve(int r, int c);
 
 private:
