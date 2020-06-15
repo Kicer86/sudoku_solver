@@ -1,9 +1,41 @@
 
+#include <iostream>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 #include "grid.hpp"
 #include "solver.hpp"
+
+
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const IGrid<T>& g)
+{
+    for(int i = 0; i < g.rows(); i++)
+    {
+        if ( i % 3 == 0)
+            os << "+------+------+------+\n";
+
+        for(int j = 0; j < g.columns(); j++)
+        {
+            if ( j % 3 == 0)
+                os << "|";
+
+            const int val = g.get(i, j);
+            if (val == 0)
+                os << "_";
+            else
+                os << val;
+
+            os << " ";
+        }
+
+        os << "|\n";
+    }
+
+    os << "+------+------+------+\n";
+
+    return os;
+}
 
 
 using testing::Contains;
@@ -122,6 +154,7 @@ TEST(SolverTest, hardPuzzleFullSolve)
     while(work)
     {
         work = false;
+
         for(;;)
         {
             Solver solver(grid);
@@ -154,4 +187,5 @@ TEST(SolverTest, hardPuzzleFullSolve)
     }
 
     // @TODO: here grid should be solved
+    std::cout << grid << '\n';
 }
