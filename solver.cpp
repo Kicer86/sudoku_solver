@@ -17,6 +17,13 @@ namespace
 
         return rule_allows;
     }
+
+    void dropDuplicates(std::vector<std::tuple<int, int, int>>& solutions)
+    {
+        std::sort(solutions.begin(), solutions.end());
+        const auto it = std::unique(solutions.begin(), solutions.end());
+        solutions.erase(it, solutions.end());
+    }
 }
 
 
@@ -94,9 +101,7 @@ std::vector<std::tuple<int, int, int>> Solver::findHidden()
         while(std::next_permutation(rules.begin(), rules.end()));
     }
 
-    std::sort(solutions.begin(), solutions.end());
-    const auto it = std::unique(solutions.begin(), solutions.end());
-    solutions.erase(it, solutions.end());
+    dropDuplicates(solutions);
 
     return solutions;
 }
