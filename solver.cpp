@@ -8,6 +8,18 @@
 #include "solver.hpp"
 
 
+namespace
+{
+    bool doesRuleAllowNumber(const IRule* rule, int r, int c, int value)
+    {
+        const auto valid_for_rule = rule->validNumbers(r, c);
+        const bool rule_allows = std::any_of(valid_for_rule.cbegin(), valid_for_rule.cend(), [value](int i) { return i == value;} );
+
+        return rule_allows;
+    }
+}
+
+
 Solver::Solver(const IGrid<int>& grid)
     : m_grid(grid)
 {
@@ -65,13 +77,9 @@ std::vector<std::tuple<int, int, int>> Solver::findHidden()
                     for(const auto& location: possible_locations)
                     {
                         bool allowed = true;
-                        for (int i = 1; allowed && i < rules.size(); i++)
-                        {
-                            const auto valid_for_rule = rules[i]->validNumbers(location.first, location.second);
-                            const bool rule_allows = std::any_of(valid_for_rule.cbegin(), valid_for_rule.cend(), [value](int i) { return i == value;} );
 
-                            allowed &= rule_allows;
-                        }
+                        for (int i = 1; allowed && i < rules.size(); i++)
+                            allowed &= doesRuleAllowNumber(rules[i], location.first, location.second, value);
 
                         if (allowed)
                             locations_after_elimination.push_back(location);
