@@ -115,21 +115,28 @@ int Solver::solve(int r, int c)
     const RowRule row_rule(m_grid);
     const SquareRule square_rule(m_grid);
 
-    const auto valid1 = column_rule.validNumbers(r, c);
-    const auto valid2 = row_rule.validNumbers(r, c);
-    const auto valid3 = square_rule.validNumbers(r, c);
+    std::vector<const IRule *> rules = {&square_rule, &column_rule, &row_rule};
 
-    std::vector<int> all12, all;
-    std::set_intersection(valid1.begin(), valid1.end(),
-                          valid2.begin(), valid2.end(),
-                          std::back_inserter(all12));
+    std::vector<int> intersection;
+    for (const IRule* rule: rules)
+    {
+        const auto valid = rule->validNumbers(r, c);
 
-    std::set_intersection(valid3.begin(), valid3.end(),
-                          all12.begin(), all12.end(),
-                          std::back_inserter(all));
+        if (intersection.empty())
+            intersection = valid;
+        else
+        {
+            std::vector<int> internal_intersection;
+            std::set_intersection(valid.begin(), valid.end(),
+                                  intersection.begin(), intersection.end(),
+                                  std::back_inserter(internal_intersection));
 
-    if (all.size() == 1)
-        v = all.front();
+            intersection = internal_intersection;
+        }
+    }
+
+    if (intersection.size() == 1)
+        v = intersection.front();
 
     return v;
 }
