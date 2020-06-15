@@ -76,10 +76,9 @@ std::vector<std::tuple<int, int, int>> Solver::findHidden()
 
                     for(const auto& location: possible_locations)
                     {
-                        bool allowed = true;
-
-                        for (int i = 1; allowed && i < rules.size(); i++)
-                            allowed &= doesRuleAllowNumber(rules[i], location.first, location.second, value);
+                        const bool allowed = std::all_of(std::next(rules.begin()), rules.end(), [&location, value](const IRule* rule) {
+                            return doesRuleAllowNumber(rule, location.first, location.second, value);
+                        });
 
                         if (allowed)
                             locations_after_elimination.push_back(location);
