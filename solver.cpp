@@ -42,7 +42,7 @@ std::vector<std::tuple<int, int, int>> Solver::findObvious()
     {
         const int r = gap.first;
         const int c = gap.second;
-        const int value = solve(r, c);
+        const int value = allRulesOneCell(r, c);
 
         if (value > 0)
             solutions.emplace_back(r, c, value);
@@ -107,7 +107,7 @@ std::vector<std::tuple<int, int, int>> Solver::findHidden()
 }
 
 
-int Solver::solve(int r, int c)
+int Solver::allRulesOneCell(int r, int c)
 {
     int v = 0;
 

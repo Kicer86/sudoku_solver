@@ -23,7 +23,7 @@ private:
     std::vector<Gap> m_gaps;
     const IGrid<int>& m_grid;
 
-    int solve(int r, int c);
+    int allRulesOneCell(int r, int c);
     std::vector<Gap> findGaps() const;
 };
 
