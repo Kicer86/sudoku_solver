@@ -16,7 +16,6 @@ public:
 
     std::vector<std::tuple<int, int, int>> findObvious();
     std::vector<std::tuple<int, int, int>> findHidden();
-    int solve(int r, int c);
 
 private:
     typedef std::pair<int, int> Gap;
@@ -24,6 +23,7 @@ private:
     std::vector<Gap> m_gaps;
     const IGrid<int>& m_grid;
 
+    int solve(int r, int c);
     std::vector<Gap> findGaps() const;
 };
 
