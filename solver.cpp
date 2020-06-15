@@ -52,7 +52,7 @@ std::vector<std::tuple<int, int, int>> Solver::findObvious()
 }
 
 
-std::vector<std::tuple<int, int, int>> Solver::findHidden()
+std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse()
 {
     std::vector<std::tuple<int, int, int>> solutions;
 

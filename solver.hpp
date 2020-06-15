@@ -15,7 +15,7 @@ public:
     Solver(const IGrid<int> &);
 
     std::vector<std::tuple<int, int, int>> findObvious();
-    std::vector<std::tuple<int, int, int>> findHidden();
+    std::vector<std::tuple<int, int, int>> valueAllowedSomewhereElse();
 
 private:
     typedef std::pair<int, int> Gap;

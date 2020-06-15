@@ -123,7 +123,7 @@ TEST(SolverTest, hardPuzzle1)
     ASSERT_EQ(steps.size(), 1);
     EXPECT_THAT( steps, Contains( std::make_tuple(4, 0, 4)) );
 
-    const auto hidden = solver.findHidden();
+    const auto hidden = solver.valueAllowedSomewhereElse();
     ASSERT_EQ(hidden.size(), 5);
     EXPECT_THAT( hidden, Contains( std::make_tuple(0, 2, 9)) );
     EXPECT_THAT( hidden, Contains( std::make_tuple(1, 7, 9)) );
@@ -175,7 +175,7 @@ TEST(SolverTest, hardPuzzleFullSolve)
         for(;;)
         {
             Solver solver(grid);
-            const auto steps = solver.findHidden();
+            const auto steps = solver.valueAllowedSomewhereElse();
 
             if (steps.empty())
                 break;
