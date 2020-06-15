@@ -10,7 +10,7 @@
 
 namespace
 {
-    bool doesRuleAllowNumber(const IRule* rule, int r, int c, int value)
+    bool doesRuleAllowNumber(const std::shared_ptr<IRule>& rule, int r, int c, int value)
     {
         const auto valid_for_rule = rule->validNumbers(r, c);
         const bool rule_allows = std::any_of(valid_for_rule.cbegin(), valid_for_rule.cend(), [value](int i) { return i == value;} );
@@ -31,24 +31,28 @@ Solver::Solver(const IGrid<int>& grid)
     : m_grid(grid)
 {
     m_gaps = findGaps();
+    m_rules.emplace_back(std::make_unique<SquareRule>(m_grid));
+    m_rules.emplace_back(std::make_unique<RowRule>(m_grid));
+    m_rules.emplace_back(std::make_unique<ColumnRule>(m_grid));
+}
+
+
+Solver::~Solver()
+{
+
 }
 
 
 std::vector<std::tuple<int, int, int>> Solver::solvable()
 {
-    const ColumnRule column_rule(m_grid);
-    const RowRule row_rule(m_grid);
-    const SquareRule square_rule(m_grid);
-
     std::vector<std::tuple<int, int, int>> all_solutions;
-    std::vector<const IRule *> rules = {&square_rule, &column_rule, &row_rule};
 
     for(const auto& gap: m_gaps)
     {
         const int r = gap.first;
         const int c = gap.second;
 
-        const int value = allRulesOneCell(rules, r, c);
+        const int value = allRulesOneCell(r, c);
 
         if (value > 0)
         {
@@ -56,7 +60,7 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
             continue;
         }
 
-        const auto solutions = valueAllowedSomewhereElse(rules, r, c);
+        const auto solutions = valueAllowedSomewhereElse(r, c);
 
         if (solutions.empty() == false)
         {
@@ -71,11 +75,11 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
 }
 
 
-std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(const std::vector<const IRule *>& source_rules, int r, int c)
+std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(int r, int c)
 {
     std::vector<std::tuple<int, int, int>> solutions;
 
-    auto rules = source_rules;
+    auto rules = m_rules;
     std::sort(rules.begin(), rules.end());
 
     do
@@ -93,7 +97,7 @@ std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(const s
 
                 for(const auto& location: possible_locations)
                 {
-                    const bool allowed = std::all_of(std::next(rules.begin()), rules.end(), [&location, value](const IRule* rule) {
+                    const bool allowed = std::all_of(std::next(rules.begin()), rules.end(), [&location, value](const auto& rule) {
                         return doesRuleAllowNumber(rule, location.first, location.second, value);
                     });
 
@@ -116,12 +120,12 @@ std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(const s
 }
 
 
-int Solver::allRulesOneCell(const std::vector<const IRule *>& rules, int r, int c)
+int Solver::allRulesOneCell(int r, int c)
 {
     int v = 0;
 
     std::vector<int> intersection;
-    for (const IRule* rule: rules)
+    for (const auto& rule: m_rules)
     {
         const auto valid = rule->validNumbers(r, c);
 
