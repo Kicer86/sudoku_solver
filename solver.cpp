@@ -40,7 +40,7 @@ std::vector<std::tuple<int, int, int>> Solver::findObvious()
     const RowRule row_rule(m_grid);
     const SquareRule square_rule(m_grid);
 
-    std::vector<std::tuple<int, int, int>> solutions;
+    std::vector<std::tuple<int, int, int>> all_solutions;
     std::vector<const IRule *> rules = {&square_rule, &column_rule, &row_rule};
 
     for(const auto& gap: m_gaps)
@@ -52,22 +52,22 @@ std::vector<std::tuple<int, int, int>> Solver::findObvious()
 
         if (value > 0)
         {
-            solutions.emplace_back(r, c, value);
+            all_solutions.emplace_back(r, c, value);
             continue;
         }
 
-        const auto solutions2 = valueAllowedSomewhereElse(rules, r, c);
+        const auto solutions = valueAllowedSomewhereElse(rules, r, c);
 
-        if (solutions2.empty() == false)
+        if (solutions.empty() == false)
         {
-            solutions.insert(solutions.end(), solutions2.begin(), solutions2.end());
+            all_solutions.insert(all_solutions.end(), solutions.begin(), solutions.end());
             continue;
         }
     }
 
-    dropDuplicates(solutions);
+    dropDuplicates(all_solutions);
 
-    return solutions;
+    return all_solutions;
 }
 
 
