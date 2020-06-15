@@ -99,7 +99,7 @@ TEST(SolverTest, easyPuzzle1StepByStep)
 }
 
 
-TEST(SolverTest, hardPuzzle1)
+TEST(SolverTest, hardPuzzle1FirstStep)
 {
     const Grid<int> grid
     {
@@ -131,7 +131,7 @@ TEST(SolverTest, hardPuzzle1)
 }
 
 
-TEST(SolverTest, hardPuzzleFullSolve)
+TEST(SolverTest, hardPuzzle1FullSolve)
 {
     Grid<int> grid
     {
