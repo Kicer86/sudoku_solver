@@ -42,17 +42,31 @@ std::vector<std::tuple<int, int, int>> Solver::findObvious()
     {
         const int r = gap.first;
         const int c = gap.second;
+
         const int value = allRulesOneCell(r, c);
 
         if (value > 0)
+        {
             solutions.emplace_back(r, c, value);
+            continue;
+        }
+
+        const auto solutions2 = valueAllowedSomewhereElse(r, c);
+
+        if (solutions2.empty() == false)
+        {
+            solutions.insert(solutions.end(), solutions2.begin(), solutions2.end());
+            continue;
+        }
     }
+
+    dropDuplicates(solutions);
 
     return solutions;
 }
 
 
-std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse()
+std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(int r, int c)
 {
     std::vector<std::tuple<int, int, int>> solutions;
 
@@ -63,43 +77,37 @@ std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse()
     std::vector<const IRule *> rules = {&square_rule, &column_rule, &row_rule};
     std::sort(rules.begin(), rules.end());
 
-    for(const auto& gap: m_gaps)
+    do
     {
-        const int r = gap.first;
-        const int c = gap.second;
-
-        do
+        std::vector valid = rules.front()->validNumbers(r, c);
+        for(const int value: valid)
         {
-            std::vector valid = rules.front()->validNumbers(r, c);
-            for(const int value: valid)
+            std::vector possible_locations = rules.front()->possibleLocations(r, c, value);
+
+            assert(possible_locations.empty() || possible_locations.size() > 1);
+
+            if (possible_locations.size() > 1)
             {
-                std::vector possible_locations = rules.front()->possibleLocations(r, c, value);
+                std::vector<std::pair<int, int>> locations_after_elimination;
 
-                assert(possible_locations.empty() || possible_locations.size() > 1);
-
-                if (possible_locations.size() > 1)
+                for(const auto& location: possible_locations)
                 {
-                    std::vector<std::pair<int, int>> locations_after_elimination;
+                    const bool allowed = std::all_of(std::next(rules.begin()), rules.end(), [&location, value](const IRule* rule) {
+                        return doesRuleAllowNumber(rule, location.first, location.second, value);
+                    });
 
-                    for(const auto& location: possible_locations)
-                    {
-                        const bool allowed = std::all_of(std::next(rules.begin()), rules.end(), [&location, value](const IRule* rule) {
-                            return doesRuleAllowNumber(rule, location.first, location.second, value);
-                        });
-
-                        if (allowed)
-                            locations_after_elimination.push_back(location);
-                    }
-
-                    if (locations_after_elimination.size() == 1)
-                        solutions.emplace_back(locations_after_elimination.front().first,
-                                            locations_after_elimination.front().second,
-                                            value);
+                    if (allowed)
+                        locations_after_elimination.push_back(location);
                 }
+
+                if (locations_after_elimination.size() == 1)
+                    solutions.emplace_back(locations_after_elimination.front().first,
+                                           locations_after_elimination.front().second,
+                                           value);
             }
         }
-        while(std::next_permutation(rules.begin(), rules.end()));
     }
+    while(std::next_permutation(rules.begin(), rules.end()));
 
     dropDuplicates(solutions);
 

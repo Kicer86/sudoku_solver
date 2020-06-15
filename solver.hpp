@@ -15,7 +15,6 @@ public:
     Solver(const IGrid<int> &);
 
     std::vector<std::tuple<int, int, int>> findObvious();
-    std::vector<std::tuple<int, int, int>> valueAllowedSomewhereElse();
 
 private:
     typedef std::pair<int, int> Gap;
@@ -24,6 +23,7 @@ private:
     const IGrid<int>& m_grid;
 
     int allRulesOneCell(int r, int c);
+    std::vector<std::tuple<int, int, int>> valueAllowedSomewhereElse(int r, int c);
     std::vector<Gap> findGaps() const;
 };
 
