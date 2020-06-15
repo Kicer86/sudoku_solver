@@ -1,5 +1,6 @@
 
 #include <algorithm>
+#include <cassert>
 
 #include "rules/column_rule.hpp"
 #include "rules/row_rule.hpp"
@@ -51,9 +52,8 @@ std::vector<std::tuple<int, int, int>> Solver::findHidden()
         {
             std::vector possible_locations = square_rule.possibleLocations(r, c, value);
 
-            if (possible_locations.size() == 1)
-                solutions.emplace_back(possible_locations.front().first, possible_locations.front().second, value);
-            else
+            assert(possible_locations.empty() || possible_locations.size() > 1);
+            if (possible_locations.size() > 1)
             {
                 std::vector<std::pair<int, int>> locations_after_elimination;
 
