@@ -41,39 +41,50 @@ std::vector<std::tuple<int, int, int>> Solver::findHidden()
     const RowRule row_rule(m_grid);
     const SquareRule square_rule(m_grid);
 
+    std::vector<const IRule *> rules = {&square_rule, &column_rule, &row_rule};
+    std::sort(rules.begin(), rules.end());
+
     for(const auto& gap: m_gaps)
     {
         const int r = gap.first;
         const int c = gap.second;
 
-        std::vector valid = square_rule.validNumbers(r, c);
-
-        for (int value: valid)
+        do
         {
-            std::vector possible_locations = square_rule.possibleLocations(r, c, value);
-
-            assert(possible_locations.empty() || possible_locations.size() > 1);
-            if (possible_locations.size() > 1)
+            std::vector valid = rules.front()->validNumbers(r, c);
+            for(const int value: valid)
             {
-                std::vector<std::pair<int, int>> locations_after_elimination;
+                std::vector possible_locations = rules.front()->possibleLocations(r, c, value);
 
-                for(const auto& location: possible_locations)
+                assert(possible_locations.empty() || possible_locations.size() > 1);
+
+                if (possible_locations.size() > 1)
                 {
-                    const auto valid_for_row = row_rule.validNumbers(location.first, location.second);
-                    const auto valid_for_col = column_rule.validNumbers(location.first, location.second);
-                    const bool row_allows = std::any_of(valid_for_row.cbegin(), valid_for_row.cend(), [value](int i) { return i == value;} );
-                    const bool col_allows = std::any_of(valid_for_col.cbegin(), valid_for_col.cend(), [value](int i) { return i == value;} );
+                    std::vector<std::pair<int, int>> locations_after_elimination;
 
-                    if (row_allows && col_allows)
-                        locations_after_elimination.push_back(location);
+                    for(const auto& location: possible_locations)
+                    {
+                        bool allowed = true;
+                        for (int i = 1; allowed && i < rules.size(); i++)
+                        {
+                            const auto valid_for_rule = rules[i]->validNumbers(location.first, location.second);
+                            const bool rule_allows = std::any_of(valid_for_rule.cbegin(), valid_for_rule.cend(), [value](int i) { return i == value;} );
+
+                            allowed &= rule_allows;
+                        }
+
+                        if (allowed)
+                            locations_after_elimination.push_back(location);
+                    }
+
+                    if (locations_after_elimination.size() == 1)
+                        solutions.emplace_back(locations_after_elimination.front().first,
+                                            locations_after_elimination.front().second,
+                                            value);
                 }
-
-                if (locations_after_elimination.size() == 1)
-                    solutions.emplace_back(locations_after_elimination.front().first,
-                                           locations_after_elimination.front().second,
-                                           value);
             }
         }
+        while(std::next_permutation(rules.begin(), rules.end()));
     }
 
     std::sort(solutions.begin(), solutions.end());

@@ -124,10 +124,12 @@ TEST(SolverTest, hardPuzzle1)
     EXPECT_THAT( steps, Contains( std::make_tuple(4, 0, 4)) );
 
     const auto hidden = solver.findHidden();
-    ASSERT_EQ(hidden.size(), 3);
+    ASSERT_EQ(hidden.size(), 5);
+    EXPECT_THAT( hidden, Contains( std::make_tuple(0, 2, 9)) );
     EXPECT_THAT( hidden, Contains( std::make_tuple(1, 7, 9)) );
     EXPECT_THAT( hidden, Contains( std::make_tuple(4, 6, 3)) );
     EXPECT_THAT( hidden, Contains( std::make_tuple(5, 4, 9)) );
+    EXPECT_THAT( hidden, Contains( std::make_tuple(7, 0, 9)) );
 }
 
 
