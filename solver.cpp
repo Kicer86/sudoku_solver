@@ -36,14 +36,19 @@ Solver::Solver(const IGrid<int>& grid)
 
 std::vector<std::tuple<int, int, int>> Solver::findObvious()
 {
+    const ColumnRule column_rule(m_grid);
+    const RowRule row_rule(m_grid);
+    const SquareRule square_rule(m_grid);
+
     std::vector<std::tuple<int, int, int>> solutions;
+    std::vector<const IRule *> rules = {&square_rule, &column_rule, &row_rule};
 
     for(const auto& gap: m_gaps)
     {
         const int r = gap.first;
         const int c = gap.second;
 
-        const int value = allRulesOneCell(r, c);
+        const int value = allRulesOneCell(rules, r, c);
 
         if (value > 0)
         {
@@ -51,7 +56,7 @@ std::vector<std::tuple<int, int, int>> Solver::findObvious()
             continue;
         }
 
-        const auto solutions2 = valueAllowedSomewhereElse(r, c);
+        const auto solutions2 = valueAllowedSomewhereElse(rules, r, c);
 
         if (solutions2.empty() == false)
         {
@@ -66,15 +71,11 @@ std::vector<std::tuple<int, int, int>> Solver::findObvious()
 }
 
 
-std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(int r, int c)
+std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(const std::vector<const IRule *>& source_rules, int r, int c)
 {
     std::vector<std::tuple<int, int, int>> solutions;
 
-    const ColumnRule column_rule(m_grid);
-    const RowRule row_rule(m_grid);
-    const SquareRule square_rule(m_grid);
-
-    std::vector<const IRule *> rules = {&square_rule, &column_rule, &row_rule};
+    auto rules = source_rules;
     std::sort(rules.begin(), rules.end());
 
     do
@@ -115,15 +116,9 @@ std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(int r, 
 }
 
 
-int Solver::allRulesOneCell(int r, int c)
+int Solver::allRulesOneCell(const std::vector<const IRule *>& rules, int r, int c)
 {
     int v = 0;
-
-    const ColumnRule column_rule(m_grid);
-    const RowRule row_rule(m_grid);
-    const SquareRule square_rule(m_grid);
-
-    std::vector<const IRule *> rules = {&square_rule, &column_rule, &row_rule};
 
     std::vector<int> intersection;
     for (const IRule* rule: rules)

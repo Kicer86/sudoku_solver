@@ -8,6 +8,7 @@
 
 #include "igrid.hpp"
 
+class IRule;
 
 class Solver
 {
@@ -22,8 +23,8 @@ private:
     std::vector<Gap> m_gaps;
     const IGrid<int>& m_grid;
 
-    int allRulesOneCell(int r, int c);
-    std::vector<std::tuple<int, int, int>> valueAllowedSomewhereElse(int r, int c);
+    int allRulesOneCell(const std::vector<const IRule *> &, int r, int c);
+    std::vector<std::tuple<int, int, int>> valueAllowedSomewhereElse(const std::vector<const IRule *> &, int r, int c);
     std::vector<Gap> findGaps() const;
 };
 
