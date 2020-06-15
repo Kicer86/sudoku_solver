@@ -34,7 +34,7 @@ Solver::Solver(const IGrid<int>& grid)
 }
 
 
-std::vector<std::tuple<int, int, int>> Solver::findObvious()
+std::vector<std::tuple<int, int, int>> Solver::solvable()
 {
     const ColumnRule column_rule(m_grid);
     const RowRule row_rule(m_grid);

@@ -62,7 +62,7 @@ TEST(SolverTest, easyPuzzle1StepByStep)
     {
         Solver solver(grid);
 
-        const auto steps = solver.findObvious();
+        const auto steps = solver.solvable();
 
         ASSERT_EQ(steps.size(), 16);
         EXPECT_THAT( steps, Contains( std::make_tuple(0, 0, 1)) );
@@ -90,7 +90,7 @@ TEST(SolverTest, easyPuzzle1StepByStep)
     {
         Solver solver(grid);
 
-        const auto steps = solver.findObvious();
+        const auto steps = solver.solvable();
 
         ASSERT_EQ(steps.size(), 2);
         EXPECT_THAT( steps, Contains( std::make_tuple(1, 3, 1)) );
@@ -119,7 +119,7 @@ TEST(SolverTest, hardPuzzle1FirstStep)
 
     Solver solver(grid);
 
-    const auto steps = solver.findObvious();
+    const auto steps = solver.solvable();
 
     ASSERT_EQ(steps.size(), 6);
     EXPECT_THAT( steps, Contains( std::make_tuple(4, 0, 4)) );
@@ -158,7 +158,7 @@ TEST(SolverTest, hardPuzzle1FullSolve)
         for(;;)
         {
             Solver solver(grid);
-            const auto steps = solver.findObvious();
+            const auto steps = solver.solvable();
 
             if (steps.empty())
                 break;
