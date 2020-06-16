@@ -27,7 +27,7 @@ private:
     const IGrid<int>& m_grid;
 
     int allRulesOneCell(int r, int c);
-    int valueAllowedSomewhereElse(int r, int c);
+    int valueDissallowedInOtherCellsOfRule(int r, int c);
     std::vector<Gap> findGaps() const;
 };
 

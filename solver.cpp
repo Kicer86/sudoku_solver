@@ -53,7 +53,7 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
             continue;
         }
 
-        value = valueAllowedSomewhereElse(r, c);
+        value = valueDissallowedInOtherCellsOfRule(r, c);
 
         if (value > 0)
         {
@@ -95,7 +95,7 @@ int Solver::allRulesOneCell(int r, int c)
 }
 
 
-int Solver::valueAllowedSomewhereElse(int r, int c)
+int Solver::valueDissallowedInOtherCellsOfRule(int r, int c)
 {
     int solution = 0;
 
