@@ -52,7 +52,7 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
         const int r = gap.first;
         const int c = gap.second;
 
-        const int value = allRulesOneCell(r, c);
+        int value = allRulesOneCell(r, c);
 
         if (value > 0)
         {
@@ -60,11 +60,11 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
             continue;
         }
 
-        const auto solutions = valueAllowedSomewhereElse(r, c);
+        value = valueAllowedSomewhereElse(r, c);
 
-        if (solutions.empty() == false)
+        if (value > 0)
         {
-            all_solutions.insert(all_solutions.end(), solutions.begin(), solutions.end());
+            all_solutions.emplace_back(r, c, value);
             continue;
         }
     }
@@ -104,9 +104,9 @@ int Solver::allRulesOneCell(int r, int c)
 }
 
 
-std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(int r, int c)
+int Solver::valueAllowedSomewhereElse(int r, int c)
 {
-    std::vector<std::tuple<int, int, int>> solutions;
+    int solution = 0;
 
     auto rules = m_rules;
     std::sort(rules.begin(), rules.end());
@@ -134,18 +134,19 @@ std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(int r, 
                         locations_after_elimination.push_back(location);
                 }
 
-                if (locations_after_elimination.size() == 1)
-                    solutions.emplace_back(locations_after_elimination.front().first,
-                                           locations_after_elimination.front().second,
-                                           value);
+                if (locations_after_elimination.size() == 1 &&
+                    locations_after_elimination.front().first == r &&
+                    locations_after_elimination.front().second == c)
+                {
+                    solution = value;
+                    break;
+                }
             }
         }
     }
-    while(std::next_permutation(rules.begin(), rules.end()));
+    while(solution == 0 && std::next_permutation(rules.begin(), rules.end()));
 
-    dropDuplicates(solutions);
-
-    return solutions;
+    return solution;
 }
 
 
