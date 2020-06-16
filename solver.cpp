@@ -1,6 +1,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <set>
 
 #include "rules/column_rule.hpp"
 #include "rules/row_rule.hpp"
@@ -45,19 +46,19 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
         const int r = gap.first;
         const int c = gap.second;
 
-        int value = valueMatchingAllRules(r, c);
+        std::vector<int> values = valuesMatchingAllRules(r, c);
 
-        if (value > 0)
+        if (values.size() == 1)
         {
-            all_solutions.emplace_back(r, c, value);
+            all_solutions.emplace_back(r, c, values.front());
             continue;
         }
 
-        value = valueDissallowedInOtherCellsOfRule(r, c);
+        values = valuesDissallowedInOtherCellsOfRule(r, c);
 
-        if (value > 0)
+        if (values.size() == 1)
         {
-            all_solutions.emplace_back(r, c, value);
+            all_solutions.emplace_back(r, c, values.front());
             continue;
         }
     }
@@ -66,9 +67,9 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
 }
 
 
-int Solver::valueMatchingAllRules(int r, int c)
+std::vector<int> Solver::valuesMatchingAllRules(int r, int c)
 {
-    int v = 0;
+    std::vector<int> solutions;
 
     std::vector<int> intersection;
     for (const auto& rule: m_rules)
@@ -88,16 +89,15 @@ int Solver::valueMatchingAllRules(int r, int c)
         }
     }
 
-    if (intersection.size() == 1)
-        v = intersection.front();
+    solutions = intersection;
 
-    return v;
+    return solutions;
 }
 
 
-int Solver::valueDissallowedInOtherCellsOfRule(int r, int c)
+std::vector<int> Solver::valuesDissallowedInOtherCellsOfRule(int r, int c)
 {
-    int solution = 0;
+    std::set<int> solutions;
 
     auto rules = m_rules;
     std::sort(rules.begin(), rules.end());
@@ -129,15 +129,14 @@ int Solver::valueDissallowedInOtherCellsOfRule(int r, int c)
                     locations_after_elimination.front().first == r &&
                     locations_after_elimination.front().second == c)
                 {
-                    solution = value;
-                    break;
+                    solutions.insert(value);
                 }
             }
         }
     }
-    while(solution == 0 && std::next_permutation(rules.begin(), rules.end()));
+    while(std::next_permutation(rules.begin(), rules.end()));
 
-    return solution;
+    return std::vector<int>(solutions.cbegin(), solutions.cend());
 }
 
 

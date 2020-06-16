@@ -26,8 +26,8 @@ private:
     std::vector<std::shared_ptr<IRule>> m_rules;
     const IGrid<int>& m_grid;
 
-    int valueMatchingAllRules(int r, int c);
-    int valueDissallowedInOtherCellsOfRule(int r, int c);
+    std::vector<int> valuesMatchingAllRules(int r, int c);
+    std::vector<int> valuesDissallowedInOtherCellsOfRule(int r, int c);
     std::vector<Gap> findGaps() const;
 };
 
