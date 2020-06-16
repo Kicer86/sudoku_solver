@@ -45,7 +45,7 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
         const int r = gap.first;
         const int c = gap.second;
 
-        int value = allRulesOneCell(r, c);
+        int value = valueMatchingAllRules(r, c);
 
         if (value > 0)
         {
@@ -66,7 +66,7 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
 }
 
 
-int Solver::allRulesOneCell(int r, int c)
+int Solver::valueMatchingAllRules(int r, int c)
 {
     int v = 0;
 
