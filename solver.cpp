@@ -75,6 +75,35 @@ std::vector<std::tuple<int, int, int>> Solver::solvable()
 }
 
 
+int Solver::allRulesOneCell(int r, int c)
+{
+    int v = 0;
+
+    std::vector<int> intersection;
+    for (const auto& rule: m_rules)
+    {
+        const auto valid = rule->validNumbers(r, c);
+
+        if (intersection.empty())
+            intersection = valid;
+        else
+        {
+            std::vector<int> internal_intersection;
+            std::set_intersection(valid.begin(), valid.end(),
+                                  intersection.begin(), intersection.end(),
+                                  std::back_inserter(internal_intersection));
+
+            intersection = internal_intersection;
+        }
+    }
+
+    if (intersection.size() == 1)
+        v = intersection.front();
+
+    return v;
+}
+
+
 std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(int r, int c)
 {
     std::vector<std::tuple<int, int, int>> solutions;
@@ -117,35 +146,6 @@ std::vector<std::tuple<int, int, int>> Solver::valueAllowedSomewhereElse(int r, 
     dropDuplicates(solutions);
 
     return solutions;
-}
-
-
-int Solver::allRulesOneCell(int r, int c)
-{
-    int v = 0;
-
-    std::vector<int> intersection;
-    for (const auto& rule: m_rules)
-    {
-        const auto valid = rule->validNumbers(r, c);
-
-        if (intersection.empty())
-            intersection = valid;
-        else
-        {
-            std::vector<int> internal_intersection;
-            std::set_intersection(valid.begin(), valid.end(),
-                                  intersection.begin(), intersection.end(),
-                                  std::back_inserter(internal_intersection));
-
-            intersection = internal_intersection;
-        }
-    }
-
-    if (intersection.size() == 1)
-        v = intersection.front();
-
-    return v;
 }
 
 
